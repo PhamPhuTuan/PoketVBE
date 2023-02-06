@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>GLOBAL CONVERSATION</h1>
+    <ul id="messages"></ul>
+
+    <form id="chatForm" action="">
+        <input type="text" id="chatmes">
+        <button id="send">submit</button>
+    </form>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    const chatForm = document.querySelector('#chatForm');
+    const chatMess = document.querySelector('#chatmes');
+    const send = document.querySelector('#send');
+
+    send.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const message = chatMess.value
+        socket.emit('on-chat', {
+            message: message
+        })
+        chatMess.value = ''
+    })
+
+    const message = document.querySelector('#messages')
+    socket.on('user-chat', (m) => {
+        const chatItem = document.createElement('li');
+        console.log()
+        chatItem.textContent = m.message;
+
+        message.appendChild(chatItem)
+    })
+</script>
+</html>
